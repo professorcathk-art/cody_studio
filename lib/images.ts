@@ -20,6 +20,11 @@ export function getThumbnailUrl(imageUrl: string, width = 400): string {
   return getTransformedUrl(imageUrl, { width, quality: 75, format: "webp" });
 }
 
+/** Supabase Image Transformation — 瀑布流預覽（完整比例、不裁切） */
+export function getFeedUrl(imageUrl: string, width = 900): string {
+  return getTransformedUrl(imageUrl, { width, quality: 80, format: "webp" });
+}
+
 /** Supabase Image Transformation — 詳情高清圖 */
 export function getDetailUrl(imageUrl: string, width = 1200): string {
   return getTransformedUrl(imageUrl, { width, quality: 85, format: "webp" });

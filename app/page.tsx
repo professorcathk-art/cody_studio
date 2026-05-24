@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
+import { getBossDesigns } from "@/lib/designs";
 import { BossHome } from "@/components/boss-home";
 
 export default async function HomePage() {
@@ -13,5 +14,7 @@ export default async function HomePage() {
     redirect("/admin");
   }
 
-  return <BossHome userName={session.name} />;
+  const initialDesigns = await getBossDesigns(session.userId);
+
+  return <BossHome userName={session.name} initialDesigns={initialDesigns} />;
 }

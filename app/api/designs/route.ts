@@ -122,8 +122,8 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
   const session = await getSession();
-  if (!session || session.role !== "admin") {
-    return NextResponse.json({ error: "未授權" }, { status: 403 });
+  if (!session) {
+    return NextResponse.json({ error: "未登入" }, { status: 401 });
   }
 
   const { id, status } = await request.json();
@@ -132,7 +132,27 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: "缺少必要參數" }, { status: 400 });
   }
 
+  const validStatuses = ["待審批", "已批准", "打版中", "生產中"];
+  if (!validStatuses.includes(status)) {
+    return NextResponse.json({ error: "無效的狀態" }, { status: 400 });
+  }
+
   const supabase = createAdminClient();
+
+  if (session.role === "boss") {
+    const { data: design } = await supabase
+      .from("designs")
+      .select("user_id")
+      .eq("id", id)
+      .single();
+
+    if (!design || design.user_id !== session.userId) {
+      return NextResponse.json({ error: "無權限" }, { status: 403 });
+    }
+  } else if (session.role !== "admin") {
+    return NextResponse.json({ error: "未授權" }, { status: 403 });
+  }
+
   const { data, error } = await supabase
     .from("designs")
     .update({ status })
