@@ -55,7 +55,7 @@ export function LoginForm() {
           value={passcode}
           onChange={(e) => setPasscode(e.target.value.replace(/\D/g, "").slice(0, 6))}
           placeholder="••••"
-          className="w-full rounded-xl border border-border bg-card px-4 py-4 text-center text-2xl tracking-[0.5em] shadow-sm transition focus:border-primary"
+          className="min-h-14 w-full rounded-xl border border-store-border bg-white px-4 py-4 text-center text-xl tracking-[0.4em] shadow-sm transition focus:border-store-accent sm:text-2xl sm:tracking-[0.5em]"
           autoComplete="off"
           autoFocus
         />
@@ -70,7 +70,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={passcode.length < 4 || loading}
-        className="w-full rounded-xl bg-accent py-3.5 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
+        className="min-h-12 w-full rounded-xl bg-store-accent py-3.5 text-sm font-medium text-white transition hover:bg-store-accent/90 disabled:cursor-not-allowed disabled:opacity-40"
       >
         {loading ? "驗證中…" : "進入系統"}
       </button>

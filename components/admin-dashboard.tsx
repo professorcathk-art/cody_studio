@@ -18,13 +18,13 @@ const navItems = [
 
 export function AdminNav() {
   return (
-    <header className="border-b border-border bg-white">
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6">
-        <div>
+    <header className="sticky top-0 z-10 border-b border-border bg-white/90 backdrop-blur-md">
+      <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
+        <div className="min-w-0">
           <p className="text-xs font-medium uppercase tracking-widest text-muted">
             Cody Studio
           </p>
-          <h1 className="text-lg font-semibold">管理後台</h1>
+          <h1 className="truncate text-base font-semibold sm:text-lg">管理後台</h1>
         </div>
         <LogoutButton />
       </div>
@@ -34,16 +34,16 @@ export function AdminNav() {
 
 export function AdminDashboard() {
   return (
-    <div className="min-h-screen">
+    <div className="safe-bottom min-h-[100dvh]">
       <AdminNav />
-      <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
-        <p className="mb-8 text-muted">選擇管理功能</p>
-        <div className="grid gap-4 sm:grid-cols-2">
+      <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-10">
+        <p className="mb-6 text-muted sm:mb-8">選擇管理功能</p>
+        <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="group rounded-2xl bg-card p-6 ring-1 ring-border transition hover:shadow-md hover:ring-zinc-300"
+              className="group block rounded-xl bg-card p-5 ring-1 ring-border transition active:scale-[0.99] hover:shadow-md hover:ring-zinc-300 sm:rounded-2xl sm:p-6"
             >
               <span className="mb-4 block text-3xl">{item.icon}</span>
               <h2 className="mb-2 text-lg font-semibold group-hover:text-primary">

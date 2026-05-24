@@ -163,17 +163,17 @@ export function DesignsManagement() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="safe-bottom min-h-[100dvh]">
       <AdminNav />
-      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+      <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
         <Link
           href="/admin"
-          className="mb-6 inline-block text-sm text-muted hover:text-foreground"
+          className="mb-5 inline-flex min-h-11 items-center text-sm text-muted hover:text-foreground sm:mb-6"
         >
           ← 返回管理面板
         </Link>
 
-        <h2 className="mb-6 text-xl font-semibold">上傳與設計管理</h2>
+        <h2 className="mb-5 text-lg font-semibold sm:mb-6 sm:text-xl">上傳與設計管理</h2>
 
         {(error || success) && (
           <div
@@ -187,7 +187,7 @@ export function DesignsManagement() {
           </div>
         )}
 
-        <section className="mb-10 rounded-2xl bg-card p-6 ring-1 ring-border">
+        <section className="mb-8 rounded-xl bg-card p-4 ring-1 ring-border sm:mb-10 sm:rounded-2xl sm:p-6">
           <h3 className="mb-4 font-medium">上傳設計圖</h3>
           <form onSubmit={handleUpload} className="space-y-4">
             <div>
@@ -196,7 +196,7 @@ export function DesignsManagement() {
                 type="file"
                 accept="image/*"
                 onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-                className="block w-full text-sm"
+                className="block w-full min-h-11 text-base file:mr-3 file:rounded-lg file:border-0 file:bg-accent-soft file:px-3 file:py-2 file:text-sm sm:text-sm"
                 required
               />
             </div>
@@ -206,7 +206,7 @@ export function DesignsManagement() {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full rounded-lg border border-border px-4 py-2 text-sm"
+                className="min-h-11 w-full rounded-lg border border-border px-4 py-2 text-base sm:text-sm"
                 required
               />
             </div>
@@ -215,8 +215,8 @@ export function DesignsManagement() {
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                rows={2}
-                className="w-full rounded-lg border border-border px-4 py-2 text-sm"
+                rows={3}
+                className="w-full rounded-lg border border-border px-4 py-3 text-base sm:text-sm"
               />
             </div>
             <div>
@@ -224,7 +224,7 @@ export function DesignsManagement() {
               <select
                 value={userId}
                 onChange={(e) => setUserId(e.target.value)}
-                className="w-full rounded-lg border border-border px-4 py-2 text-sm"
+                className="min-h-11 w-full rounded-lg border border-border px-4 py-2 text-base sm:text-sm"
                 required
               >
                 {bosses.length === 0 ? (
@@ -241,33 +241,33 @@ export function DesignsManagement() {
             <button
               type="submit"
               disabled={uploading || bosses.length === 0}
-              className="rounded-lg bg-accent px-6 py-2.5 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-40"
+              className="min-h-11 w-full rounded-lg bg-accent px-6 py-2.5 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-40 sm:w-auto"
             >
               {uploading ? "上傳中…" : "上傳"}
             </button>
           </form>
         </section>
 
-        <section className="rounded-2xl bg-card ring-1 ring-border overflow-hidden">
-          <div className="border-b border-border px-6 py-4">
+        <section className="overflow-hidden rounded-xl bg-card ring-1 ring-border sm:rounded-2xl">
+          <div className="border-b border-border px-4 py-3 sm:px-6 sm:py-4">
             <h3 className="font-medium">全部設計圖</h3>
           </div>
 
           {loading ? (
-            <p className="px-6 py-8 text-sm text-muted">載入中…</p>
+            <p className="px-4 py-8 text-sm text-muted sm:px-6">載入中…</p>
           ) : designs.length === 0 ? (
-            <p className="px-6 py-8 text-sm text-muted">尚無設計圖</p>
+            <p className="px-4 py-8 text-sm text-muted sm:px-6">尚無設計圖</p>
           ) : (
             <ul className="divide-y divide-border">
               {designs.map((design) => (
-                <li key={design.id} className="px-6 py-4">
-                  <div className="flex flex-wrap gap-4">
-                    <div className="relative h-20 w-16 shrink-0 overflow-hidden rounded-lg bg-accent-soft">
+                <li key={design.id} className="px-4 py-4 sm:px-6">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+                    <div className="relative h-32 w-full shrink-0 overflow-hidden rounded-lg bg-accent-soft sm:h-20 sm:w-16">
                       <Image
                         src={getThumbnailUrl(design.image_url, 200)}
                         alt={design.title}
                         fill
-                        sizes="64px"
+                        sizes="(max-width: 640px) 100vw, 64px"
                         className="object-cover"
                         loading="lazy"
                       />
@@ -280,13 +280,13 @@ export function DesignsManagement() {
                       <p className="text-sm text-muted">
                         指派：{design.boss_name ?? "—"}
                       </p>
-                      <div className="mt-3 flex flex-wrap items-center gap-3">
+                      <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
                         <select
                           value={design.status}
                           onChange={(e) =>
                             updateStatus(design.id, e.target.value as DesignStatus)
                           }
-                          className="rounded-lg border border-border px-3 py-1.5 text-sm"
+                          className="min-h-11 w-full rounded-lg border border-border px-3 py-2 text-base sm:w-auto sm:py-1.5 sm:text-sm"
                         >
                           {DESIGN_STATUSES.map((s) => (
                             <option key={s} value={s}>
@@ -294,20 +294,22 @@ export function DesignsManagement() {
                             </option>
                           ))}
                         </select>
+                        <div className="flex gap-3">
                         <button
                           type="button"
                           onClick={() => toggleExpand(design.id)}
-                          className="text-sm text-primary hover:underline"
+                          className="min-h-11 flex-1 text-sm text-primary hover:underline sm:flex-none sm:min-h-0"
                         >
                           {expandedId === design.id ? "收起評論" : "評論管理"}
                         </button>
                         <button
                           type="button"
                           onClick={() => handleDelete(design.id, design.title)}
-                          className="text-sm text-red-600 hover:underline"
+                          className="min-h-11 flex-1 text-sm text-red-600 hover:underline sm:flex-none sm:min-h-0"
                         >
                           刪除
                         </button>
+                        </div>
                       </div>
                     </div>
                   </div>

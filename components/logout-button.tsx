@@ -15,7 +15,7 @@ export function LogoutButton({ label = "登出" }: { label?: string }) {
     <button
       type="button"
       onClick={handleLogout}
-      className="rounded-lg px-3 py-1.5 text-sm text-muted transition hover:bg-accent-soft hover:text-foreground"
+      className="min-h-11 shrink-0 rounded-lg px-3 py-2 text-sm text-muted transition hover:bg-accent-soft hover:text-foreground"
     >
       {label}
     </button>

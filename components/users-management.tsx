@@ -103,17 +103,17 @@ export function UsersManagement() {
   const admins = users.filter((u) => u.role === "admin");
 
   return (
-    <div className="min-h-screen">
+    <div className="safe-bottom min-h-[100dvh]">
       <AdminNav />
-      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+      <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
         <Link
           href="/admin"
-          className="mb-6 inline-block text-sm text-muted hover:text-foreground"
+          className="mb-5 inline-flex min-h-11 items-center text-sm text-muted hover:text-foreground sm:mb-6"
         >
           ← 返回管理面板
         </Link>
 
-        <h2 className="mb-6 text-xl font-semibold">密碼與用戶管理</h2>
+        <h2 className="mb-5 text-lg font-semibold sm:mb-6 sm:text-xl">密碼與用戶管理</h2>
 
         {(error || success) && (
           <div
@@ -127,45 +127,45 @@ export function UsersManagement() {
           </div>
         )}
 
-        <section className="mb-10 rounded-2xl bg-card p-6 ring-1 ring-border">
+        <section className="mb-8 rounded-xl bg-card p-4 ring-1 ring-border sm:mb-10 sm:rounded-2xl sm:p-6">
           <h3 className="mb-4 font-medium">新增老闆</h3>
-          <form onSubmit={handleCreate} className="flex flex-wrap gap-4">
+          <form onSubmit={handleCreate} className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
             <input
               type="text"
               placeholder="姓名"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="rounded-lg border border-border px-4 py-2 text-sm"
+              className="min-h-11 w-full rounded-lg border border-border px-4 py-2 text-base sm:w-auto sm:text-sm"
               required
             />
             <input
               type="text"
               inputMode="numeric"
-              placeholder="4 位數密碼"
-              maxLength={4}
+              placeholder="4–6 位數密碼"
+              maxLength={6}
               value={passcode}
               onChange={(e) =>
-                setPasscode(e.target.value.replace(/\D/g, "").slice(0, 4))
+                setPasscode(e.target.value.replace(/\D/g, "").slice(0, 6))
               }
-              className="w-32 rounded-lg border border-border px-4 py-2 text-sm tracking-widest"
+              className="min-h-11 w-full rounded-lg border border-border px-4 py-2 text-base tracking-widest sm:w-36 sm:text-sm"
               required
             />
             <button
               type="submit"
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800"
+              className="min-h-11 w-full rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 sm:w-auto"
             >
               新增
             </button>
           </form>
         </section>
 
-        <section className="rounded-2xl bg-card ring-1 ring-border overflow-hidden">
-          <div className="border-b border-border px-6 py-4">
+        <section className="overflow-hidden rounded-xl bg-card ring-1 ring-border sm:rounded-2xl">
+          <div className="border-b border-border px-4 py-3 sm:px-6 sm:py-4">
             <h3 className="font-medium">管理員</h3>
           </div>
           <ul className="divide-y divide-border">
             {admins.map((u) => (
-              <li key={u.id} className="flex items-center justify-between px-6 py-4">
+              <li key={u.id} className="flex flex-col gap-2 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                 <div>
                   <p className="font-medium">{u.name}</p>
                   <p className="text-sm text-muted">密碼：{u.passcode}</p>
@@ -178,45 +178,46 @@ export function UsersManagement() {
           </ul>
         </section>
 
-        <section className="mt-6 rounded-2xl bg-card ring-1 ring-border overflow-hidden">
-          <div className="border-b border-border px-6 py-4">
+        <section className="mt-4 overflow-hidden rounded-xl bg-card ring-1 ring-border sm:mt-6 sm:rounded-2xl">
+          <div className="border-b border-border px-4 py-3 sm:px-6 sm:py-4">
             <h3 className="font-medium">老闆列表</h3>
           </div>
           {loading ? (
-            <p className="px-6 py-8 text-sm text-muted">載入中…</p>
+            <p className="px-4 py-8 text-sm text-muted sm:px-6">載入中…</p>
           ) : bosses.length === 0 ? (
-            <p className="px-6 py-8 text-sm text-muted">尚無老闆帳號</p>
+            <p className="px-4 py-8 text-sm text-muted sm:px-6">尚無老闆帳號</p>
           ) : (
             <ul className="divide-y divide-border">
               {bosses.map((u) => (
-                <li key={u.id} className="px-6 py-4">
-                  <div className="flex flex-wrap items-center justify-between gap-4">
-                    <div>
+                <li key={u.id} className="px-4 py-4 sm:px-6">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="min-w-0">
                       <p className="font-medium">{u.name}</p>
                       <p className="text-sm text-muted">
                         密碼：{editingId === u.id ? "****" : u.passcode}
                       </p>
                     </div>
-                    <div className="flex flex-wrap items-center gap-2">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
                       {editingId === u.id ? (
                         <>
                           <input
                             type="text"
                             inputMode="numeric"
-                            maxLength={4}
+                            maxLength={6}
                             value={editPasscode}
                             onChange={(e) =>
                               setEditPasscode(
-                                e.target.value.replace(/\D/g, "").slice(0, 4)
+                                e.target.value.replace(/\D/g, "").slice(0, 6)
                               )
                             }
-                            className="w-24 rounded-lg border border-border px-3 py-1.5 text-sm tracking-widest"
+                            className="min-h-11 w-full rounded-lg border border-border px-3 py-2 text-base tracking-widest sm:w-28 sm:py-1.5 sm:text-sm"
                             placeholder="新密碼"
                           />
+                          <div className="flex gap-2">
                           <button
                             type="button"
                             onClick={() => handleUpdatePasscode(u.id)}
-                            className="rounded-lg bg-primary px-3 py-1.5 text-sm text-white"
+                            className="min-h-11 flex-1 rounded-lg bg-primary px-3 py-2 text-sm text-white sm:flex-none sm:py-1.5"
                           >
                             儲存
                           </button>
@@ -226,13 +227,14 @@ export function UsersManagement() {
                               setEditingId(null);
                               setEditPasscode("");
                             }}
-                            className="rounded-lg px-3 py-1.5 text-sm text-muted"
+                            className="min-h-11 flex-1 rounded-lg px-3 py-2 text-sm text-muted sm:flex-none sm:py-1.5"
                           >
                             取消
                           </button>
+                          </div>
                         </>
                       ) : (
-                        <>
+                        <div className="flex flex-col gap-2 sm:flex-row">
                           <button
                             type="button"
                             onClick={() => {
@@ -241,18 +243,18 @@ export function UsersManagement() {
                               setError("");
                               setSuccess("");
                             }}
-                            className="rounded-lg bg-accent-soft px-3 py-1.5 text-sm hover:bg-zinc-200"
+                            className="min-h-11 rounded-lg bg-accent-soft px-3 py-2 text-sm hover:bg-zinc-200 sm:py-1.5"
                           >
                             編輯密碼
                           </button>
                           <button
                             type="button"
                             onClick={() => handleDelete(u.id, u.name)}
-                            className="rounded-lg px-3 py-1.5 text-sm text-red-600 hover:bg-red-50"
+                            className="min-h-11 rounded-lg px-3 py-2 text-sm text-red-600 hover:bg-red-50 sm:py-1.5"
                           >
                             刪除
                           </button>
-                        </>
+                        </div>
                       )}
                     </div>
                   </div>

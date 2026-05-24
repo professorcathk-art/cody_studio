@@ -71,13 +71,13 @@ export function CommentsSection({
             onChange={(e) => setContent(e.target.value)}
             placeholder="輸入您的留言…"
             rows={3}
-            className="w-full resize-none rounded-xl border border-border bg-card px-4 py-3 text-sm shadow-sm"
+            className="w-full resize-none rounded-xl border border-border bg-card px-4 py-3 text-base sm:text-sm"
           />
           {error && <p className="text-sm text-red-600">{error}</p>}
           <button
             type="submit"
             disabled={!content.trim() || loading}
-            className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-[var(--primary-hover)] disabled:opacity-40"
+            className="min-h-11 w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white transition hover:bg-[var(--primary-hover)] disabled:opacity-40 sm:w-auto sm:py-2"
           >
             {loading ? "送出中…" : "送出"}
           </button>

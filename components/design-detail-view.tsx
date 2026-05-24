@@ -42,22 +42,23 @@ export function DesignDetailView({ design, comments }: DesignDetailProps) {
   }
 
   return (
-    <div className="min-h-screen">
-      <header className="border-b border-border bg-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
+    <div className="safe-bottom min-h-[100dvh] bg-store-bg">
+      <header className="sticky top-0 z-10 border-b border-store-border bg-white/90 backdrop-blur-md">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
           <Link
             href="/"
-            className="text-sm text-muted transition hover:text-foreground"
+            className="flex min-h-11 min-w-11 items-center gap-2 text-sm text-store-muted transition hover:text-store-foreground"
           >
-            ← 返回列表
+            <span aria-hidden>←</span>
+            <span className="hidden sm:inline">返回精品店</span>
           </Link>
           <LogoutButton />
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-        <div className="grid gap-8 lg:grid-cols-2">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-accent-soft ring-1 ring-border">
+      <main className="mx-auto max-w-6xl px-3 py-5 sm:px-6 sm:py-8">
+        <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
+          <div className="relative aspect-[4/5] max-h-[70vh] w-full overflow-hidden rounded-xl bg-accent-soft ring-1 ring-border sm:max-h-none sm:rounded-2xl lg:aspect-[4/5]">
             <Image
               src={detailUrl}
               alt={design.title}
@@ -68,10 +69,10 @@ export function DesignDetailView({ design, comments }: DesignDetailProps) {
             />
           </div>
 
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-5 sm:gap-6">
             <div>
-              <div className="mb-3 flex flex-wrap items-center gap-3">
-                <h1 className="text-2xl font-semibold tracking-tight">
+              <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+                <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
                   {design.title}
                 </h1>
                 <StatusBadge status={design.status} />
@@ -87,7 +88,7 @@ export function DesignDetailView({ design, comments }: DesignDetailProps) {
               type="button"
               onClick={toggleFavorite}
               disabled={favoriting}
-              className={`inline-flex w-fit items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ring-1 transition disabled:opacity-50 ${
+              className={`inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium ring-1 transition disabled:opacity-50 sm:w-fit ${
                 isFavorited
                   ? "bg-rose-50 text-rose-700 ring-rose-200"
                   : "bg-card text-muted ring-border hover:text-foreground"
@@ -97,7 +98,7 @@ export function DesignDetailView({ design, comments }: DesignDetailProps) {
               {isFavorited ? "已收藏" : "收藏"}
             </button>
 
-            <div className="rounded-2xl bg-card p-6 ring-1 ring-border">
+            <div className="rounded-xl bg-card p-4 ring-1 ring-border sm:rounded-2xl sm:p-6">
               <CommentsSection
                 designId={design.id}
                 initialComments={comments}
