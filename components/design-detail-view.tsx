@@ -87,7 +87,7 @@ export function DesignDetailView({ design, comments }: DesignDetailProps) {
           )}
         </div>
 
-        <div className="relative mb-4 aspect-[9/16] w-full overflow-hidden rounded-2xl bg-[#f5f5f5] ring-1 ring-store-border">
+        <div className="relative mb-4 aspect-[16/9] w-full overflow-hidden rounded-2xl bg-[#f5f5f5] ring-1 ring-store-border">
           <Image
             src={detailUrl}
             alt={design.title}

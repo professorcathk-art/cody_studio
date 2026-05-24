@@ -46,9 +46,9 @@ export function getTransformedUrl(
   return `${baseUrl}/storage/v1/render/image/public/${BUCKET}/${path}?${params}`;
 }
 
-/** 列表 9:16 畫布預覽 — contain、不裁切 */
-export function getFeedUrl(imageUrl: string, width = 600): string {
-  const height = Math.round((width * 16) / 9);
+/** 列表 16:9 畫布預覽 — contain、不裁切 */
+export function getFeedUrl(imageUrl: string, width = 800): string {
+  const height = Math.round((width * 9) / 16);
   return getTransformedUrl(imageUrl, {
     width,
     height,

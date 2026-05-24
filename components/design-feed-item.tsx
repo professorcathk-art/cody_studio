@@ -38,7 +38,7 @@ export const DesignFeedItem = memo(function DesignFeedItem({
 
   return (
     <article
-      className="overflow-hidden rounded-2xl bg-white ring-1 ring-store-border shadow-sm [content-visibility:auto] [contain-intrinsic-size:0_520px]"
+      className="overflow-hidden rounded-2xl bg-white ring-1 ring-store-border shadow-sm [content-visibility:auto] [contain-intrinsic-size:0_420px]"
     >
       {/* 標題列 */}
       <div className="flex items-start justify-between gap-2 px-3 py-2.5 sm:px-4 sm:py-3">
@@ -58,8 +58,8 @@ export const DesignFeedItem = memo(function DesignFeedItem({
         <StatusBadge status={status} />
       </div>
 
-      {/* 9:16 畫布 — 完整顯示、不裁切 */}
-      <div className="relative aspect-[9/16] w-full bg-[#f5f5f5]">
+      {/* 16:9 畫布 — 完整顯示、不裁切 */}
+      <div className="relative aspect-[16/9] w-full bg-[#f5f5f5]">
         <Image
           src={feedUrl}
           alt={title}
@@ -84,7 +84,7 @@ export const DesignFeedItem = memo(function DesignFeedItem({
         </button>
       </div>
 
-      {/* 快速更新狀態 — 緊接 9:16 畫布下方 */}
+      {/* 快速更新狀態 — 緊接 16:9 畫布下方 */}
       <div className="space-y-3 px-3 py-3 sm:px-4 sm:py-4">
         <div>
           <p className="mb-2 text-xs font-medium text-store-muted">快速更新狀態</p>
