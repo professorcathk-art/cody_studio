@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS designs (
   description TEXT DEFAULT '',
   image_url TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT '待審批'
-    CHECK (status IN ('待審批', '已批准', '打版中', '生產中')),
+    CHECK (status IN ('待審批', '已批准', '打版中', '生產中', '退稿')),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 

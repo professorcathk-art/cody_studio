@@ -43,31 +43,38 @@ async function main() {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) throw new Error("Missing Supabase env vars in .env.local");
 
-  const bossName = process.argv.includes("--boss")
+  const supabase = createClient(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+
+  // 取得 Boss A（依名稱或 passcode）
+  const bossNameArg = process.argv.includes("--boss")
     ? process.argv[process.argv.indexOf("--boss") + 1]
     : "Boss A";
   const passcode = process.argv.includes("--passcode")
     ? process.argv[process.argv.indexOf("--passcode") + 1]
     : "12345";
 
-  const supabase = createClient(url, key, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-
-  // 確保 passcode 欄位夠長
-  console.log("Checking database…");
-
-  // 取得或建立老闆用戶
   let { data: boss } = await supabase
     .from("users")
     .select("id, name, passcode")
-    .eq("passcode", passcode)
+    .eq("name", bossNameArg)
+    .eq("role", "boss")
     .maybeSingle();
+
+  if (!boss) {
+    const res = await supabase
+      .from("users")
+      .select("id, name, passcode")
+      .eq("passcode", passcode)
+      .maybeSingle();
+    boss = res.data;
+  }
 
   if (!boss) {
     const { data, error } = await supabase
       .from("users")
-      .insert({ name: bossName, passcode, role: "boss" })
+      .insert({ name: bossNameArg, passcode, role: "boss" })
       .select()
       .single();
     if (error) {

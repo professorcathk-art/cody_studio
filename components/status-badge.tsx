@@ -5,6 +5,7 @@ const statusStyles: Record<DesignStatus, string> = {
   已批准: "bg-emerald-50 text-emerald-800 ring-emerald-200",
   打版中: "bg-blue-50 text-blue-800 ring-blue-200",
   生產中: "bg-violet-50 text-violet-800 ring-violet-200",
+  退稿: "bg-red-50 text-red-800 ring-red-200",
 };
 
 export function StatusBadge({ status }: { status: DesignStatus }) {

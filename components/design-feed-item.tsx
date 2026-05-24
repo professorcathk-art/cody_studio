@@ -5,6 +5,7 @@ import Image from "next/image";
 import { memo, useState } from "react";
 import { StatusBadge } from "./status-badge";
 import { DesignImageModal } from "./design-image-modal";
+import { ConfirmDialog } from "./confirm-dialog";
 import { getFeedUrl } from "@/lib/images";
 import type { DesignStatus } from "@/lib/types";
 
@@ -36,13 +37,20 @@ export const DesignFeedItem = memo(function DesignFeedItem({
   statusUpdating,
 }: DesignFeedItemProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [approveOpen, setApproveOpen] = useState(false);
+  const [rejectOpen, setRejectOpen] = useState(false);
   const feedUrl = getFeedUrl(imageUrl);
   const isApproved = status === "已批准";
+  const isRejected = status === "退稿";
 
-  function handleApprove() {
-    if (!isApproved && !statusUpdating) {
-      onStatusChange(id, "已批准");
-    }
+  function confirmApprove() {
+    onStatusChange(id, "已批准");
+    setApproveOpen(false);
+  }
+
+  function confirmReject() {
+    onStatusChange(id, "退稿");
+    setRejectOpen(false);
   }
 
   return (
@@ -76,7 +84,6 @@ export const DesignFeedItem = memo(function DesignFeedItem({
             loading={priority ? undefined : "lazy"}
           />
 
-          {/* 放大 */}
           <button
             type="button"
             onClick={() => setLightboxOpen(true)}
@@ -86,7 +93,6 @@ export const DesignFeedItem = memo(function DesignFeedItem({
             +
           </button>
 
-          {/* 收藏 */}
           <button
             type="button"
             onClick={() => onToggleFavorite(id)}
@@ -101,10 +107,35 @@ export const DesignFeedItem = memo(function DesignFeedItem({
             <span className="text-base">{isFavorited ? "❤️" : "🤍"}</span>
           </button>
 
+          {/* 退稿 */}
+          <button
+            type="button"
+            onClick={() => !isRejected && setRejectOpen(true)}
+            disabled={statusUpdating || isRejected}
+            className={`absolute bottom-2 left-2 flex h-10 w-10 items-center justify-center rounded-full shadow-sm transition disabled:cursor-default sm:bottom-3 sm:left-3 ${
+              isRejected
+                ? "bg-red-500 text-white"
+                : "bg-white/90 text-red-600 ring-1 ring-red-200 hover:bg-red-50"
+            } disabled:opacity-100`}
+            aria-label={isRejected ? "已退稿" : "退稿"}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              className="h-5 w-5"
+              aria-hidden
+            >
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+
           {/* 批准 */}
           <button
             type="button"
-            onClick={handleApprove}
+            onClick={() => !isApproved && setApproveOpen(true)}
             disabled={statusUpdating || isApproved}
             className={`absolute bottom-2 right-2 flex h-10 w-10 items-center justify-center rounded-full shadow-sm transition disabled:cursor-default sm:bottom-3 sm:right-3 ${
               isApproved
@@ -143,6 +174,30 @@ export const DesignFeedItem = memo(function DesignFeedItem({
         onClose={() => setLightboxOpen(false)}
         imageUrl={imageUrl}
         title={title}
+      />
+
+      <ConfirmDialog
+        open={approveOpen}
+        title="確認批准"
+        message={`確定要批准「${title}」嗎？批准後狀態將更新為「已批准」。`}
+        confirmLabel="確認批准"
+        cancelLabel="取消"
+        variant="success"
+        loading={statusUpdating}
+        onConfirm={confirmApprove}
+        onCancel={() => setApproveOpen(false)}
+      />
+
+      <ConfirmDialog
+        open={rejectOpen}
+        title="確認退稿"
+        message={`確定要退稿「${title}」嗎？退稿後將移至退稿資料夾。`}
+        confirmLabel="確認退稿"
+        cancelLabel="取消"
+        variant="danger"
+        loading={statusUpdating}
+        onConfirm={confirmReject}
+        onCancel={() => setRejectOpen(false)}
       />
     </>
   );

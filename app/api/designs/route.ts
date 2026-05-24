@@ -132,7 +132,7 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: "缺少必要參數" }, { status: 400 });
   }
 
-  const validStatuses = ["待審批", "已批准", "打版中", "生產中"];
+  const validStatuses = ["待審批", "已批准", "打版中", "生產中", "退稿"];
   if (!validStatuses.includes(status)) {
     return NextResponse.json({ error: "無效的狀態" }, { status: 400 });
   }
