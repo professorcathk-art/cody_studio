@@ -80,7 +80,7 @@ export function BossHome({ userName, initialDesigns }: BossHomeProps) {
     <div className="safe-bottom min-h-[100dvh] bg-store-bg">
       <StoreHeader userName={userName} />
 
-      <main className="mx-auto max-w-3xl px-3 py-5 sm:px-6 sm:py-8">
+      <main className="mx-auto max-w-6xl px-3 py-5 sm:px-6 sm:py-8">
         <StoreHero totalDesigns={designs.length} favoritedCount={favoritedCount} />
 
         <section className="mt-8 sm:mt-12">
@@ -140,7 +140,7 @@ export function BossHome({ userName, initialDesigns }: BossHomeProps) {
               </p>
             </div>
           ) : (
-            <div className="flex flex-col gap-6 sm:gap-8">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-4 lg:gap-6">
               {visibleDesigns.map((design, index) => (
                 <DesignFeedItem
                   key={design.id}

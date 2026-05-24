@@ -20,19 +20,15 @@ export function getThumbnailUrl(imageUrl: string, width = 400): string {
   return getTransformedUrl(imageUrl, { width, quality: 75, format: "webp" });
 }
 
-/** Supabase Image Transformation — 瀑布流預覽（完整比例、不裁切） */
-export function getFeedUrl(imageUrl: string, width = 900): string {
-  return getTransformedUrl(imageUrl, { width, quality: 80, format: "webp" });
-}
-
-/** Supabase Image Transformation — 詳情高清圖 */
-export function getDetailUrl(imageUrl: string, width = 1200): string {
-  return getTransformedUrl(imageUrl, { width, quality: 85, format: "webp" });
-}
-
 export function getTransformedUrl(
   imageUrl: string,
-  opts: { width: number; quality: number; format: "webp" | "origin" }
+  opts: {
+    width: number;
+    quality: number;
+    format: "webp" | "origin";
+    resize?: "contain" | "cover" | "fill";
+    height?: number;
+  }
 ): string {
   const baseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   if (!baseUrl) return imageUrl;
@@ -44,7 +40,32 @@ export function getTransformedUrl(
     format: opts.format,
   });
 
+  if (opts.height) params.set("height", String(opts.height));
+  if (opts.resize) params.set("resize", opts.resize);
+
   return `${baseUrl}/storage/v1/render/image/public/${BUCKET}/${path}?${params}`;
+}
+
+/** 列表 9:16 畫布預覽 — contain、不裁切 */
+export function getFeedUrl(imageUrl: string, width = 600): string {
+  const height = Math.round((width * 16) / 9);
+  return getTransformedUrl(imageUrl, {
+    width,
+    height,
+    quality: 75,
+    format: "webp",
+    resize: "contain",
+  });
+}
+
+/** Supabase Image Transformation — 詳情高清圖 */
+export function getDetailUrl(imageUrl: string, width = 1200): string {
+  return getTransformedUrl(imageUrl, {
+    width,
+    quality: 85,
+    format: "webp",
+    resize: "contain",
+  });
 }
 
 /** 上傳後的公開 object URL（不含 transform） */

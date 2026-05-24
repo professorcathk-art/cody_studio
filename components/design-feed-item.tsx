@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { memo } from "react";
 import { StatusBadge } from "./status-badge";
 import { getFeedUrl } from "@/lib/images";
 import { DESIGN_STATUSES, type DesignStatus } from "@/lib/types";
-
-const QUICK_STATUSES: DesignStatus[] = ["已批准", "打版中", "生產中"];
 
 interface DesignFeedItemProps {
   id: string;
@@ -22,7 +21,7 @@ interface DesignFeedItemProps {
   statusUpdating?: boolean;
 }
 
-export function DesignFeedItem({
+export const DesignFeedItem = memo(function DesignFeedItem({
   id,
   title,
   description,
@@ -38,73 +37,73 @@ export function DesignFeedItem({
   const feedUrl = getFeedUrl(imageUrl);
 
   return (
-    <article className="overflow-hidden rounded-2xl bg-white ring-1 ring-store-border shadow-sm">
-      <div className="flex items-start justify-between gap-3 border-b border-store-border px-4 py-3">
+    <article
+      className="overflow-hidden rounded-2xl bg-white ring-1 ring-store-border shadow-sm [content-visibility:auto] [contain-intrinsic-size:0_520px]"
+    >
+      {/* 標題列 */}
+      <div className="flex items-start justify-between gap-2 px-3 py-2.5 sm:px-4 sm:py-3">
         <div className="min-w-0 flex-1">
           <p className="text-[10px] font-semibold uppercase tracking-widest text-store-muted">
             Cody Studio
           </p>
-          <h3 className="mt-0.5 font-semibold tracking-tight">{title}</h3>
+          <h3 className="mt-0.5 truncate text-sm font-semibold tracking-tight sm:text-base">
+            {title}
+          </h3>
           {description && (
-            <p className="mt-1 line-clamp-2 text-sm text-store-muted">{description}</p>
+            <p className="mt-0.5 line-clamp-1 text-xs text-store-muted sm:line-clamp-2 sm:text-sm">
+              {description}
+            </p>
           )}
         </div>
-        <div className="flex shrink-0 flex-col items-end gap-2">
-          <StatusBadge status={status} />
-          <button
-            type="button"
-            onClick={() => onToggleFavorite(id)}
-            disabled={favoriting}
-            className={`flex h-10 w-10 items-center justify-center rounded-full transition disabled:opacity-50 ${
-              isFavorited
-                ? "bg-rose-50 text-rose-600 ring-1 ring-rose-200"
-                : "bg-store-bg text-store-muted ring-1 ring-store-border hover:text-store-foreground"
-            }`}
-            aria-label={isFavorited ? "取消收藏" : "收藏"}
-          >
-            <span>{isFavorited ? "❤️" : "🤍"}</span>
-          </button>
-        </div>
+        <StatusBadge status={status} />
       </div>
 
-      <div className="bg-[#f3f1ee]">
+      {/* 9:16 畫布 — 完整顯示、不裁切 */}
+      <div className="relative aspect-[9/16] w-full bg-[#f5f5f5]">
         <Image
           src={feedUrl}
           alt={title}
-          width={900}
-          height={1200}
-          sizes="(max-width: 768px) 100vw, 720px"
-          className="h-auto w-full object-contain"
-          style={{ width: "100%", height: "auto" }}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-contain"
           priority={priority}
           loading={priority ? undefined : "lazy"}
         />
+        <button
+          type="button"
+          onClick={() => onToggleFavorite(id)}
+          disabled={favoriting}
+          className={`absolute right-2 top-2 flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-sm transition disabled:opacity-50 sm:right-3 sm:top-3 ${
+            isFavorited
+              ? "bg-rose-500/90 text-white shadow-sm"
+              : "bg-white/90 text-zinc-600 shadow-sm hover:bg-white"
+          }`}
+          aria-label={isFavorited ? "取消收藏" : "收藏"}
+        >
+          <span className="text-base">{isFavorited ? "❤️" : "🤍"}</span>
+        </button>
       </div>
 
-      <div className="space-y-3 px-4 py-3">
+      {/* 快速更新狀態 — 緊接 9:16 畫布下方 */}
+      <div className="space-y-3 px-3 py-3 sm:px-4 sm:py-4">
         <div>
           <p className="mb-2 text-xs font-medium text-store-muted">快速更新狀態</p>
-          <div className="flex flex-wrap gap-2">
-            {QUICK_STATUSES.map((s) => (
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
+            {DESIGN_STATUSES.map((s) => (
               <button
                 key={s}
                 type="button"
                 disabled={statusUpdating || status === s}
                 onClick={() => onStatusChange(id, s)}
-                className={`min-h-10 rounded-full px-3 py-1.5 text-xs font-medium transition disabled:cursor-default sm:text-sm ${
+                className={`min-h-10 rounded-full px-3 py-2 text-xs font-medium transition disabled:cursor-default sm:text-sm ${
                   status === s
                     ? "bg-store-accent text-white shadow-sm"
-                    : "bg-store-bg text-store-foreground ring-1 ring-store-border hover:bg-white disabled:opacity-100"
+                    : "bg-[#f5f5f5] text-store-foreground ring-1 ring-store-border hover:bg-white disabled:opacity-100"
                 }`}
               >
                 {s}
               </button>
             ))}
-            {status === "待審批" && (
-              <span className="flex min-h-10 items-center rounded-full bg-amber-50 px-3 text-xs text-amber-800 ring-1 ring-amber-200">
-                待審批
-              </span>
-            )}
           </div>
         </div>
 
@@ -123,7 +122,7 @@ export function DesignFeedItem({
           </select>
           <Link
             href={`/design/${id}`}
-            className="inline-flex min-h-10 items-center rounded-lg bg-store-bg px-4 py-2 text-sm text-store-foreground ring-1 ring-store-border transition hover:bg-white"
+            className="inline-flex min-h-10 flex-1 items-center justify-center rounded-lg bg-store-bg px-4 py-2 text-sm text-store-foreground ring-1 ring-store-border transition hover:bg-white sm:flex-none"
           >
             留言
           </Link>
@@ -131,4 +130,4 @@ export function DesignFeedItem({
       </div>
     </article>
   );
-}
+});

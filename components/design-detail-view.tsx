@@ -87,15 +87,13 @@ export function DesignDetailView({ design, comments }: DesignDetailProps) {
           )}
         </div>
 
-        <div className="mb-4 overflow-hidden rounded-2xl bg-[#f3f1ee] ring-1 ring-store-border">
+        <div className="relative mb-4 aspect-[9/16] w-full overflow-hidden rounded-2xl bg-[#f5f5f5] ring-1 ring-store-border">
           <Image
             src={detailUrl}
             alt={design.title}
-            width={1200}
-            height={1600}
+            fill
             sizes="(max-width: 768px) 100vw, 720px"
-            className="h-auto w-full object-contain"
-            style={{ width: "100%", height: "auto" }}
+            className="object-contain"
             priority
           />
         </div>
