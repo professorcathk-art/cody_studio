@@ -1,14 +1,8 @@
 export type UserRole = "admin" | "boss";
 
-export type DesignStatus = "待審批" | "已批准" | "打版中" | "生產中" | "退稿";
+export type DesignStatus = "待審批" | "已批准" | "退稿";
 
-export const DESIGN_STATUSES: DesignStatus[] = [
-  "待審批",
-  "已批准",
-  "打版中",
-  "生產中",
-  "退稿",
-];
+export const DESIGN_STATUSES: DesignStatus[] = ["待審批", "已批准", "退稿"];
 
 export interface User {
   id: string;

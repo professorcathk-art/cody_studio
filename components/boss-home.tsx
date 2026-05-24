@@ -5,11 +5,10 @@ import { DesignFeedItem } from "./design-feed-item";
 import { StoreHeader } from "./store-header";
 import { StoreHero } from "./store-hero";
 import { StoreFooter } from "./store-footer";
-import { DESIGN_STATUSES, type DesignStatus } from "@/lib/types";
+import type { DesignStatus } from "@/lib/types";
 import type { BossDesignItem } from "@/lib/designs";
 
-type StatusFilter = "全部" | DesignStatus;
-type FolderFilter = "none" | "favorites" | "approved" | "rejected";
+type FolderFilter = "none" | "favorites" | "pending" | "approved" | "rejected";
 
 interface BossHomeProps {
   userName: string;
@@ -18,24 +17,24 @@ interface BossHomeProps {
 
 export function BossHome({ userName, initialDesigns }: BossHomeProps) {
   const [designs, setDesigns] = useState(initialDesigns);
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>("全部");
   const [folderFilter, setFolderFilter] = useState<FolderFilter>("none");
   const [favoritingId, setFavoritingId] = useState<string | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   const favoritedCount = designs.filter((d) => d.is_favorited).length;
+  const pendingCount = designs.filter((d) => d.status === "待審批").length;
   const approvedCount = designs.filter((d) => d.status === "已批准").length;
   const rejectedCount = designs.filter((d) => d.status === "退稿").length;
 
   const visibleDesigns = useMemo(() => {
     return designs.filter((d) => {
       if (folderFilter === "favorites" && !d.is_favorited) return false;
+      if (folderFilter === "pending" && d.status !== "待審批") return false;
       if (folderFilter === "approved" && d.status !== "已批准") return false;
       if (folderFilter === "rejected" && d.status !== "退稿") return false;
-      if (statusFilter !== "全部" && d.status !== statusFilter) return false;
       return true;
     });
-  }, [designs, statusFilter, folderFilter]);
+  }, [designs, folderFilter]);
 
   function setFolder(next: FolderFilter) {
     setFolderFilter((current) => (current === next ? "none" : next));
@@ -83,13 +82,16 @@ export function BossHome({ userName, initialDesigns }: BossHomeProps) {
     }
   }
 
-  const statusFilters: StatusFilter[] = ["全部", ...DESIGN_STATUSES];
-
   const emptyMessage = (() => {
-    if (folderFilter === "favorites") return { icon: "🤍", title: "尚無收藏的設計", hint: "點擊卡片上的愛心即可加入收藏" };
-    if (folderFilter === "approved") return { icon: "✓", title: "尚無已批准的設計", hint: "點擊綠色勾號即可批准設計" };
-    if (folderFilter === "rejected") return { icon: "✗", title: "尚無退稿的設計", hint: "點擊紅色叉號即可退稿" };
-    return { icon: "🧢", title: "沒有符合條件的設計", hint: "試試其他篩選條件" };
+    if (folderFilter === "favorites")
+      return { icon: "🤍", title: "尚無收藏的設計", hint: "點擊卡片上的愛心即可加入收藏" };
+    if (folderFilter === "pending")
+      return { icon: "⏳", title: "尚無待審批的設計", hint: "新上傳的設計會顯示在此" };
+    if (folderFilter === "approved")
+      return { icon: "✓", title: "尚無已批准的設計", hint: "點擊綠色勾號即可批准設計" };
+    if (folderFilter === "rejected")
+      return { icon: "✗", title: "尚無退稿的設計", hint: "點擊紅色叉號即可退稿" };
+    return { icon: "🧢", title: "目前沒有設計圖", hint: "管理員上傳後將顯示於此" };
   })();
 
   return (
@@ -112,7 +114,7 @@ export function BossHome({ userName, initialDesigns }: BossHomeProps) {
             </p>
           </div>
 
-          <div className="-mx-3 mb-4 flex gap-2 overflow-x-auto px-3 pb-1 sm:mx-0 sm:px-0">
+          <div className="-mx-3 mb-6 flex flex-wrap gap-2 overflow-x-auto px-3 pb-1 sm:mx-0 sm:px-0">
             <button
               type="button"
               onClick={() => setFolder("favorites")}
@@ -123,6 +125,17 @@ export function BossHome({ userName, initialDesigns }: BossHomeProps) {
               }`}
             >
               ❤️ 收藏{favoritedCount > 0 ? ` (${favoritedCount})` : ""}
+            </button>
+            <button
+              type="button"
+              onClick={() => setFolder("pending")}
+              className={`min-h-10 shrink-0 rounded-full px-4 py-2 text-sm font-medium transition ${
+                folderFilter === "pending"
+                  ? "bg-amber-500 text-white shadow-sm"
+                  : "bg-white text-store-muted ring-1 ring-store-border hover:text-store-foreground"
+              }`}
+            >
+              待審批{pendingCount > 0 ? ` (${pendingCount})` : ""}
             </button>
             <button
               type="button"
@@ -146,23 +159,6 @@ export function BossHome({ userName, initialDesigns }: BossHomeProps) {
             >
               ✗ 退稿{rejectedCount > 0 ? ` (${rejectedCount})` : ""}
             </button>
-          </div>
-
-          <div className="-mx-3 mb-6 flex gap-2 overflow-x-auto px-3 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
-            {statusFilters.map((f) => (
-              <button
-                key={f}
-                type="button"
-                onClick={() => setStatusFilter(f)}
-                className={`min-h-10 shrink-0 rounded-full px-4 py-2 text-sm font-medium transition ${
-                  statusFilter === f
-                    ? "bg-store-accent text-white shadow-sm"
-                    : "bg-white text-store-muted ring-1 ring-store-border hover:text-store-foreground"
-                }`}
-              >
-                {f}
-              </button>
-            ))}
           </div>
 
           {visibleDesigns.length === 0 ? (

@@ -9,8 +9,6 @@ import { LogoutButton } from "./logout-button";
 import { getDetailUrl } from "@/lib/images";
 import { DESIGN_STATUSES, type Comment, type DesignStatus } from "@/lib/types";
 
-const QUICK_STATUSES: DesignStatus[] = ["已批准", "打版中", "生產中"];
-
 interface DesignDetailProps {
   design: {
     id: string;
@@ -116,9 +114,9 @@ export function DesignDetailView({ design, comments }: DesignDetailProps) {
         </div>
 
         <div className="mb-6 rounded-2xl bg-white p-4 ring-1 ring-store-border">
-          <p className="mb-2 text-xs font-medium text-store-muted">快速更新狀態</p>
+          <p className="mb-2 text-xs font-medium text-store-muted">更新狀態</p>
           <div className="flex flex-wrap gap-2">
-            {QUICK_STATUSES.map((s) => (
+            {DESIGN_STATUSES.map((s) => (
               <button
                 key={s}
                 type="button"
@@ -134,18 +132,6 @@ export function DesignDetailView({ design, comments }: DesignDetailProps) {
               </button>
             ))}
           </div>
-          <select
-            value={status}
-            disabled={statusUpdating}
-            onChange={(e) => updateStatus(e.target.value as DesignStatus)}
-            className="mt-3 min-h-10 w-full rounded-lg border border-store-border px-3 py-2 text-sm"
-          >
-            {DESIGN_STATUSES.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
         </div>
 
         <div className="rounded-2xl bg-white p-4 ring-1 ring-store-border sm:p-6">
