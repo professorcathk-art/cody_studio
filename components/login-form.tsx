@@ -38,14 +38,17 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-6">
+    <form onSubmit={handleSubmit} className="w-full space-y-6">
       <div className="space-y-2">
         <label
           htmlFor="passcode"
-          className="block text-center text-sm font-medium text-muted"
+          className="block text-center text-sm font-medium text-store-foreground"
         >
-          通關密碼
+          組織通關密碼
         </label>
+        <p className="text-center text-[10px] uppercase tracking-wider text-store-muted">
+          Organisation passcode
+        </p>
         <input
           id="passcode"
           type="password"
@@ -55,7 +58,7 @@ export function LoginForm() {
           value={passcode}
           onChange={(e) => setPasscode(e.target.value.replace(/\D/g, "").slice(0, 6))}
           placeholder="••••"
-          className="min-h-14 w-full rounded-xl border border-store-border bg-white px-4 py-4 text-center text-xl tracking-[0.4em] shadow-sm transition focus:border-store-accent sm:text-2xl sm:tracking-[0.5em]"
+          className="min-h-14 w-full rounded-xl border border-store-border bg-store-bg/50 px-4 py-4 text-center text-xl tracking-[0.4em] shadow-sm transition focus:border-store-accent focus:bg-white sm:text-2xl sm:tracking-[0.5em]"
           autoComplete="off"
           autoFocus
         />
@@ -72,8 +75,11 @@ export function LoginForm() {
         disabled={passcode.length < 4 || loading}
         className="min-h-12 w-full rounded-xl bg-store-accent py-3.5 text-sm font-medium text-white transition hover:bg-store-accent/90 disabled:cursor-not-allowed disabled:opacity-40"
       >
-        {loading ? "驗證中…" : "進入系統"}
+        {loading ? "驗證中…" : "進入設計入口"}
       </button>
+      <p className="text-center text-[10px] text-store-muted">
+        Enter design portal
+      </p>
     </form>
   );
 }

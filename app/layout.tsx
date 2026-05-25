@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Cody Studio — 帽子設計圖",
-  description: "帽子設計圖展示與管理系統",
+  title: "Cody Studio — 帽款批發設計平台",
+  description: "專業帽款設計批發入口。Cap & hat wholesale design portal.",
 };
 
 export const viewport = {
