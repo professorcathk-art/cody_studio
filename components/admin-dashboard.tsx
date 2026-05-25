@@ -3,6 +3,12 @@ import { LogoutButton } from "@/components/logout-button";
 
 const navItems = [
   {
+    href: "/admin/inquiries",
+    title: "聯絡查詢管理",
+    description: "查看、搜尋與管理網站聯絡表單 lead",
+    icon: "✉️",
+  },
+  {
     href: "/admin/users",
     title: "密碼與用戶管理",
     description: "新增老闆、編輯通關密碼、刪除用戶",
@@ -38,7 +44,7 @@ export function AdminDashboard() {
       <AdminNav />
       <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-10">
         <p className="mb-6 text-muted sm:mb-8">選擇管理功能</p>
-        <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 sm:gap-4">
           {navItems.map((item) => (
             <Link
               key={item.href}

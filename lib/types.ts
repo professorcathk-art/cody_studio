@@ -47,3 +47,24 @@ export interface SessionUser {
 export interface DesignWithFavorite extends Design {
   is_favorited: boolean;
 }
+
+export type ContactInquiryStatus = "new" | "read" | "archived";
+
+export interface ContactInquiry {
+  id: string;
+  name: string;
+  email: string;
+  phone_contact: string;
+  company: string;
+  order_size: string;
+  message: string;
+  status: ContactInquiryStatus;
+  email_sent: boolean;
+  created_at: string;
+}
+
+export const CONTACT_INQUIRY_STATUSES: ContactInquiryStatus[] = [
+  "new",
+  "read",
+  "archived",
+];

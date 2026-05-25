@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 const TO_EMAIL = "professor.cat.hk@gmail.com";
 
@@ -26,14 +27,6 @@ function isValidPayload(body: unknown): body is ContactPayload {
 }
 
 export async function POST(request: Request) {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    return NextResponse.json(
-      { error: "郵件服務未設定", errorEn: "Email service is not configured." },
-      { status: 503 }
-    );
-  }
-
   let body: unknown;
   try {
     body = await request.json();
@@ -65,40 +58,68 @@ export async function POST(request: Request) {
     );
   }
 
-  const resend = new Resend(apiKey);
-  const from = "onboarding@resend.dev";
+  const supabase = createAdminClient();
+  const { data: saved, error: dbError } = await supabase
+    .from("contact_inquiries")
+    .insert({
+      name,
+      email,
+      phone_contact: phoneContact,
+      company,
+      order_size: orderSize,
+      message,
+      status: "new",
+      email_sent: false,
+    })
+    .select()
+    .single();
 
-  const html = `
-    <h2>New Project Inquiry — Cody Cap Studio</h2>
-    <p><strong>Name / 姓名:</strong> ${escapeHtml(name)}</p>
-    <p><strong>Email / 電郵:</strong> ${escapeHtml(email)}</p>
-    <p><strong>WhatsApp / Other / 其他聯絡:</strong> ${escapeHtml(phoneContact)}</p>
-    <p><strong>Company / 公司:</strong> ${escapeHtml(company)}</p>
-    <p><strong>Order Size / 訂單數量:</strong> ${escapeHtml(orderSize)}</p>
-    <hr />
-    <p><strong>Message / 需求描述:</strong></p>
-    <p>${escapeHtml(message).replace(/\n/g, "<br />")}</p>
-  `;
-
-  const { error } = await resend.emails.send({
-    from,
-    to: TO_EMAIL,
-    replyTo: email,
-    subject: `[Cody Cap Studio] New inquiry — ${name} (${company})`,
-    html,
-  });
-
-  if (error) {
+  if (dbError) {
     return NextResponse.json(
       {
-        error: "郵件傳送失敗，請直接來信 chris.lau@professor-cat.com",
-        errorEn: "Failed to send. Please email chris.lau@professor-cat.com directly.",
+        error: "儲存失敗，請稍後再試或直接來信 chris.lau@professor-cat.com",
+        errorEn: "Failed to save inquiry. Please email chris.lau@professor-cat.com directly.",
       },
       { status: 500 }
     );
   }
 
-  return NextResponse.json({ success: true });
+  let emailSent = false;
+  const apiKey = process.env.RESEND_API_KEY;
+
+  if (apiKey) {
+    const resend = new Resend(apiKey);
+    const html = `
+      <h2>New Project Inquiry — Cody Cap Studio</h2>
+      <p><strong>Name / 姓名:</strong> ${escapeHtml(name)}</p>
+      <p><strong>Email / 電郵:</strong> ${escapeHtml(email)}</p>
+      <p><strong>WhatsApp / Other / 其他聯絡:</strong> ${escapeHtml(phoneContact)}</p>
+      <p><strong>Company / 公司:</strong> ${escapeHtml(company)}</p>
+      <p><strong>Order Size / 訂單數量:</strong> ${escapeHtml(orderSize)}</p>
+      <hr />
+      <p><strong>Message / 需求描述:</strong></p>
+      <p>${escapeHtml(message).replace(/\n/g, "<br />")}</p>
+    `;
+
+    const { error: emailError } = await resend.emails.send({
+      from: "onboarding@resend.dev",
+      to: TO_EMAIL,
+      replyTo: email,
+      subject: `[Cody Cap Studio] New inquiry — ${name} (${company})`,
+      html,
+    });
+
+    emailSent = !emailError;
+
+    if (emailSent) {
+      await supabase
+        .from("contact_inquiries")
+        .update({ email_sent: true })
+        .eq("id", saved.id);
+    }
+  }
+
+  return NextResponse.json({ success: true, emailSent });
 }
 
 function escapeHtml(text: string): string {
