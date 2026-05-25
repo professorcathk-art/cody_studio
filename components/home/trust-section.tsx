@@ -1,21 +1,12 @@
 import { FullBleedImage } from "@/components/home/full-bleed-image";
 import { LuxuryBody, LuxuryEyebrow, LuxuryTitle } from "@/components/luxury/typography";
-import { getShowcaseCoverUrl, HERO_DESIGN_ID } from "@/lib/landing-showcase";
+import { getShowcaseCoverUrl } from "@/lib/landing-showcase";
 
 export function TrustSection() {
-  const imageA = getShowcaseCoverUrl(HERO_DESIGN_ID, 1600, 1200);
   const imageB = getShowcaseCoverUrl("084", 1600, 1200);
 
   return (
     <section className="bg-neutral-950 text-white">
-      {/* Editorial block 1 — image full bleed */}
-      <FullBleedImage
-        src={imageA}
-        overlay="dark"
-        focusRightOnMobile
-        heightClass="h-[55vh] min-h-[360px] sm:h-[70vh] sm:min-h-[480px]"
-      />
-
       <div className="mx-auto max-w-4xl px-4 py-24 text-center sm:px-8 sm:py-32">
         <LuxuryEyebrow
           en="Trust & Heritage"
@@ -36,7 +27,6 @@ export function TrustSection() {
         />
       </div>
 
-      {/* Editorial block 2 — offset image strip */}
       <div className="relative w-full">
         <FullBleedImage
           src={imageB}

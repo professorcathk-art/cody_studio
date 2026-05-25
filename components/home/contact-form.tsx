@@ -5,7 +5,8 @@ import { LuxuryFieldLabel } from "@/components/luxury/typography";
 
 const INITIAL = {
   name: "",
-  contact: "",
+  email: "",
+  phoneContact: "",
   company: "",
   orderSize: "",
   message: "",
@@ -67,10 +68,17 @@ export function ContactForm() {
       type: "text",
     },
     {
-      id: "contact",
-      en: "Contact (Email / WhatsApp)",
-      zh: "聯絡方式",
-      value: form.contact,
+      id: "email",
+      en: "Email",
+      zh: "電郵",
+      value: form.email,
+      type: "email",
+    },
+    {
+      id: "phoneContact",
+      en: "WhatsApp / Other Contact",
+      zh: "WhatsApp 或其他聯絡方式",
+      value: form.phoneContact,
       type: "text",
     },
     {

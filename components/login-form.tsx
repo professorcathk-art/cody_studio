@@ -11,7 +11,7 @@ import {
 const ERROR_MESSAGES: Record<string, { zh: string; en: string }> = {
   default: { zh: "登入失敗", en: "Login failed. Please check your passcode." },
   network: { zh: "連線失敗，請稍後再試", en: "Connection failed. Please try again later." },
-  invalid: { zh: "通關密碼錯誤", en: "Incorrect passcode." },
+  invalid: { zh: "密碼錯誤", en: "Incorrect passcode." },
 };
 
 interface LoginFormProps {
@@ -73,17 +73,17 @@ export function LoginForm({ variant = "default" }: LoginFormProps) {
         {isLuxury ? (
           <label htmlFor="passcode" className="block text-center">
             <span className="block text-[11px] font-medium uppercase tracking-[0.22em] text-white/80">
-              Organisation Passcode
+              Passcode
             </span>
             <span className="mt-1 block text-xs tracking-wide text-white/50">
-              組織通關密碼
+              密碼
             </span>
           </label>
         ) : (
           <BilingualLabel
             htmlFor="passcode"
-            zh="組織通關密碼"
-            en="Organisation Passcode"
+            zh="密碼"
+            en="Passcode"
           />
         )}
         <input

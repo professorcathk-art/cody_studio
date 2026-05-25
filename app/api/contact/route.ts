@@ -5,7 +5,8 @@ const TO_EMAIL = "professor.cat.hk@gmail.com";
 
 interface ContactPayload {
   name: string;
-  contact: string;
+  email: string;
+  phoneContact: string;
   company: string;
   orderSize: string;
   message: string;
@@ -16,7 +17,8 @@ function isValidPayload(body: unknown): body is ContactPayload {
   const b = body as Record<string, unknown>;
   return (
     typeof b.name === "string" &&
-    typeof b.contact === "string" &&
+    typeof b.email === "string" &&
+    typeof b.phoneContact === "string" &&
     typeof b.company === "string" &&
     typeof b.orderSize === "string" &&
     typeof b.message === "string"
@@ -50,12 +52,13 @@ export async function POST(request: Request) {
   }
 
   const name = body.name.trim();
-  const contact = body.contact.trim();
+  const email = body.email.trim();
+  const phoneContact = body.phoneContact.trim();
   const company = body.company.trim();
   const orderSize = body.orderSize.trim();
   const message = body.message.trim();
 
-  if (!name || !contact || !company || !orderSize || !message) {
+  if (!name || !email || !phoneContact || !company || !orderSize || !message) {
     return NextResponse.json(
       { error: "請填寫所有欄位", errorEn: "Please complete all fields." },
       { status: 400 }
@@ -63,15 +66,13 @@ export async function POST(request: Request) {
   }
 
   const resend = new Resend(apiKey);
-  // Resend free tier — default sender only
   const from = "onboarding@resend.dev";
-
-  const replyTo = contact.includes("@") ? contact : undefined;
 
   const html = `
     <h2>New Project Inquiry — Cody Cap Studio</h2>
     <p><strong>Name / 姓名:</strong> ${escapeHtml(name)}</p>
-    <p><strong>Contact / 聯絡方式:</strong> ${escapeHtml(contact)}</p>
+    <p><strong>Email / 電郵:</strong> ${escapeHtml(email)}</p>
+    <p><strong>WhatsApp / Other / 其他聯絡:</strong> ${escapeHtml(phoneContact)}</p>
     <p><strong>Company / 公司:</strong> ${escapeHtml(company)}</p>
     <p><strong>Order Size / 訂單數量:</strong> ${escapeHtml(orderSize)}</p>
     <hr />
@@ -82,7 +83,7 @@ export async function POST(request: Request) {
   const { error } = await resend.emails.send({
     from,
     to: TO_EMAIL,
-    replyTo,
+    replyTo: email,
     subject: `[Cody Cap Studio] New inquiry — ${name} (${company})`,
     html,
   });
