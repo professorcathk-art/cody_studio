@@ -4,8 +4,8 @@ import { DesignsManagement } from "@/components/designs-management";
 
 export default async function AdminDesignsPage() {
   const session = await getSession();
-  if (!session) redirect("/login");
-  if (session.role !== "admin") redirect("/");
+  if (!session) redirect("/#portal");
+  if (session.role !== "admin") redirect("/portal");
 
   return <DesignsManagement />;
 }

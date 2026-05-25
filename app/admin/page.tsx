@@ -4,8 +4,8 @@ import { AdminDashboard } from "@/components/admin-dashboard";
 
 export default async function AdminPage() {
   const session = await getSession();
-  if (!session) redirect("/login");
-  if (session.role !== "admin") redirect("/");
+  if (!session) redirect("/#portal");
+  if (session.role !== "admin") redirect("/portal");
 
   return <AdminDashboard />;
 }

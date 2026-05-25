@@ -63,7 +63,7 @@ export function DesignDetailView({ design, comments }: DesignDetailProps) {
       <header className="sticky top-0 z-10 border-b border-store-border bg-white/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
           <Link
-            href="/"
+            href="/portal"
             className="flex min-h-11 items-center gap-2 text-sm text-store-muted transition hover:text-store-foreground"
           >
             <span aria-hidden>←</span>

@@ -1,4 +1,4 @@
-import { getFeedUrl, getPublicObjectUrl } from "@/lib/images";
+import { getFeedUrl, getPublicObjectUrl, getTransformedUrl } from "@/lib/images";
 
 /** Boss A storage prefix — showcase designs 072–079 */
 const BOSS_A_ID = "03b575af-1a6b-4e06-b2bb-96bc0cffb2a3";
@@ -17,6 +17,22 @@ export const SHOWCASE_DESIGN_IDS = [
 export function getShowcaseImageUrl(designId: string, width = 640): string {
   const objectUrl = getPublicObjectUrl(`${BOSS_A_ID}/${designId}.png`);
   return getFeedUrl(objectUrl, width);
+}
+
+/** 全螢幕 cover 用 — 無白邊 */
+export function getShowcaseCoverUrl(
+  designId: string,
+  width = 1920,
+  height = 1080
+): string {
+  const objectUrl = getPublicObjectUrl(`${BOSS_A_ID}/${designId}.png`);
+  return getTransformedUrl(objectUrl, {
+    width,
+    height,
+    quality: 82,
+    format: "webp",
+    resize: "cover",
+  });
 }
 
 export const LANDING_FEATURES = [

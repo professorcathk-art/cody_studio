@@ -34,25 +34,23 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const session = await getSessionFromRequest(request);
 
-  const isLogin = pathname === "/login";
+  if (pathname === "/login") {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
   const isAdminRoute = pathname.startsWith("/admin");
   const isBossRoute =
-    pathname === "/" || pathname.startsWith("/design/");
-
-  if (isLogin && session) {
-    const dest = session.role === "admin" ? "/admin" : "/";
-    return NextResponse.redirect(new URL(dest, request.url));
-  }
+    pathname === "/portal" || pathname.startsWith("/design/");
 
   if (isBossRoute || isAdminRoute) {
     if (!session) {
-      const loginUrl = new URL("/login", request.url);
-      loginUrl.searchParams.set("from", pathname);
-      return NextResponse.redirect(loginUrl);
+      const homeUrl = new URL("/", request.url);
+      homeUrl.hash = "portal";
+      return NextResponse.redirect(homeUrl);
     }
 
     if (isAdminRoute && session.role !== "admin") {
-      return NextResponse.redirect(new URL("/", request.url));
+      return NextResponse.redirect(new URL("/portal", request.url));
     }
 
     if (isBossRoute && session.role === "admin") {
@@ -64,5 +62,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/login", "/design/:path*", "/admin/:path*"],
+  matcher: ["/login", "/portal", "/design/:path*", "/admin/:path*"],
 };

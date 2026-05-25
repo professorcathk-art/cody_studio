@@ -9,7 +9,7 @@ export default async function DesignPage({
   params: Promise<{ id: string }>;
 }) {
   const session = await getSession();
-  if (!session) redirect("/login");
+  if (!session) redirect("/#portal");
   if (session.role === "admin") redirect("/admin");
 
   const { id } = await params;

@@ -7,7 +7,7 @@ export function LogoutButton({ label = "登出" }: { label?: string }) {
 
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/login");
+    router.push("/");
     router.refresh();
   }
 

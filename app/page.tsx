@@ -1,20 +1,29 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { LuxuryHomepage } from "@/components/home/luxury-homepage";
 import { getSession } from "@/lib/auth";
-import { getBossDesigns } from "@/lib/designs";
-import { BossHome } from "@/components/boss-home";
+
+export const metadata: Metadata = {
+  title: "Cody Cap Studio — Premium OEM/ODM Cap Solutions",
+  description:
+    "頂級帽款設計與製造解決方案。Premium OEM/ODM cap solutions from concept to global delivery.",
+  openGraph: {
+    title: "Cody Cap Studio",
+    description: "Premium OEM/ODM Cap Solutions · 頂級帽款設計與製造解決方案",
+    url: "https://codycapstudio.com",
+  },
+};
 
 export default async function HomePage() {
   const session = await getSession();
 
-  if (!session) {
-    redirect("/login");
-  }
-
-  if (session.role === "admin") {
+  if (session?.role === "admin") {
     redirect("/admin");
   }
 
-  const initialDesigns = await getBossDesigns(session.userId);
+  if (session?.role === "boss") {
+    redirect("/portal");
+  }
 
-  return <BossHome userName={session.name} initialDesigns={initialDesigns} />;
+  return <LuxuryHomepage />;
 }
