@@ -2,16 +2,27 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import {
+  BilingualButtonText,
+  BilingualError,
+  BilingualLabel,
+} from "@/components/bilingual";
+
+const ERROR_MESSAGES: Record<string, { zh: string; en: string }> = {
+  default: { zh: "登入失敗", en: "Login failed. Please check your passcode." },
+  network: { zh: "連線失敗，請稍後再試", en: "Connection failed. Please try again later." },
+  invalid: { zh: "通關密碼錯誤", en: "Incorrect passcode." },
+};
 
 export function LoginForm() {
   const router = useRouter();
   const [passcode, setPasscode] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<{ zh: string; en: string } | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError("");
+    setError(null);
     setLoading(true);
 
     try {
@@ -24,14 +35,19 @@ export function LoginForm() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error ?? "登入失敗");
+        const msg = data.error ?? "";
+        if (msg.includes("密碼") || msg.includes("passcode") || msg.includes("錯誤")) {
+          setError(ERROR_MESSAGES.invalid);
+        } else {
+          setError({ zh: msg || ERROR_MESSAGES.default.zh, en: ERROR_MESSAGES.default.en });
+        }
         return;
       }
 
       router.push(data.role === "admin" ? "/admin" : "/");
       router.refresh();
     } catch {
-      setError("連線失敗，請稍後再試");
+      setError(ERROR_MESSAGES.network);
     } finally {
       setLoading(false);
     }
@@ -39,16 +55,12 @@ export function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="w-full space-y-6">
-      <div className="space-y-2">
-        <label
+      <div className="space-y-3">
+        <BilingualLabel
           htmlFor="passcode"
-          className="block text-center text-sm font-medium text-store-foreground"
-        >
-          組織通關密碼
-        </label>
-        <p className="text-center text-[10px] uppercase tracking-wider text-store-muted">
-          Organisation passcode
-        </p>
+          zh="組織通關密碼"
+          en="Organisation Passcode"
+        />
         <input
           id="passcode"
           type="password"
@@ -58,28 +70,29 @@ export function LoginForm() {
           value={passcode}
           onChange={(e) => setPasscode(e.target.value.replace(/\D/g, "").slice(0, 6))}
           placeholder="••••"
-          className="min-h-14 w-full rounded-xl border border-store-border bg-store-bg/50 px-4 py-4 text-center text-xl tracking-[0.4em] shadow-sm transition focus:border-store-accent focus:bg-white sm:text-2xl sm:tracking-[0.5em]"
+          className="min-h-14 w-full rounded-xl border border-store-border bg-store-bg/40 px-4 py-4 text-center text-xl tracking-[0.4em] shadow-sm transition focus:border-store-accent focus:bg-white sm:text-2xl sm:tracking-[0.5em]"
           autoComplete="off"
           autoFocus
         />
+        <p className="text-center text-[10px] text-store-muted">
+          <span className="block">4–6 位數字</span>
+          <span className="mt-0.5 block">4–6 digit code</span>
+        </p>
       </div>
 
-      {error && (
-        <p className="text-center text-sm text-red-600" role="alert">
-          {error}
-        </p>
-      )}
+      {error && <BilingualError zh={error.zh} en={error.en} />}
 
       <button
         type="submit"
         disabled={passcode.length < 4 || loading}
-        className="min-h-12 w-full rounded-xl bg-store-accent py-3.5 text-sm font-medium text-white transition hover:bg-store-accent/90 disabled:cursor-not-allowed disabled:opacity-40"
+        className="min-h-[3.25rem] w-full rounded-xl bg-store-accent py-3.5 text-sm font-medium text-white transition hover:bg-store-accent/90 disabled:cursor-not-allowed disabled:opacity-40"
       >
-        {loading ? "驗證中…" : "進入設計入口"}
+        <BilingualButtonText
+          zh="進入設計入口"
+          en="Enter Design Portal"
+          loading={loading}
+        />
       </button>
-      <p className="text-center text-[10px] text-store-muted">
-        Enter design portal
-      </p>
     </form>
   );
 }

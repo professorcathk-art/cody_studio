@@ -21,18 +21,21 @@ export function getShowcaseImageUrl(designId: string, width = 640): string {
 
 export const LANDING_FEATURES = [
   {
-    title: "專屬設計庫",
-    caption: "Exclusive design library",
-    description: "每季帽款設計集中管理，隨時預覽高清稿。",
+    titleZh: "專屬設計庫",
+    titleEn: "Exclusive Design Library",
+    bodyZh: "每季帽款設計集中管理，隨時預覽高清稿件。",
+    bodyEn: "Seasonal cap designs in one private library with high-resolution previews.",
   },
   {
-    title: "即時審批",
-    caption: "Real-time approval",
-    description: "批准、退稿、收藏，一鍵完成審稿流程。",
+    titleZh: "即時審批",
+    titleEn: "Real-Time Approval",
+    bodyZh: "批准、退稿、收藏，一鍵完成審稿流程。",
+    bodyEn: "Approve, reject, or save favorites — streamlined review in one click.",
   },
   {
-    title: "批發協作",
-    caption: "Wholesale collaboration",
-    description: "設計師與客戶留言協作，加速打樣決策。",
+    titleZh: "批發協作",
+    titleEn: "Wholesale Collaboration",
+    bodyZh: "設計師與客戶留言協作，加速打樣與採購決策。",
+    bodyEn: "Comment threads between designers and buyers to speed sampling decisions.",
   },
 ] as const;

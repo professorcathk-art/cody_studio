@@ -63,6 +63,18 @@ body {
   display: none;
 }
 
+.protected-banner {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.protected-media {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
 ::selection {
   background: #dbeafe;
   color: #1e3a8a;

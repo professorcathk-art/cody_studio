@@ -1,65 +1,79 @@
-import Image from "next/image";
 import {
   getShowcaseImageUrl,
   SHOWCASE_DESIGN_IDS,
 } from "@/lib/landing-showcase";
+import { ProtectedBanner } from "@/components/protected-banner";
 
-interface LandingShowcaseProps {
-  variant?: "strip" | "grid";
-}
+const GENERIC_ALT = "Season cap design preview";
 
-export function LandingShowcase({ variant = "grid" }: LandingShowcaseProps) {
-  if (variant === "strip") {
-    return (
-      <div className="relative -mx-4 overflow-hidden sm:-mx-6">
-        <div className="flex gap-3 overflow-x-auto px-4 pb-1 scrollbar-none sm:gap-4 sm:px-6">
-          {SHOWCASE_DESIGN_IDS.map((id) => (
-            <ShowcaseCard key={id} id={id} compact />
-          ))}
-        </div>
-      </div>
-    );
-  }
+/** 首屏主視覺 */
+export function LandingHeroBanner() {
+  const src = getShowcaseImageUrl(SHOWCASE_DESIGN_IDS[0], 1400);
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-      {SHOWCASE_DESIGN_IDS.map((id) => (
-        <ShowcaseCard key={id} id={id} />
-      ))}
+    <div className="relative w-full">
+      <ProtectedBanner src={src} alt={GENERIC_ALT} priority aspect="hero" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/5" />
     </div>
   );
 }
 
-function ShowcaseCard({ id, compact }: { id: string; compact?: boolean }) {
-  const src = getShowcaseImageUrl(id, compact ? 480 : 640);
+/** 編輯式全寬 banner 列表（無編號、無標籤） */
+export function LandingBannerStack({
+  ids,
+  startPriority = false,
+}: {
+  ids: readonly string[];
+  startPriority?: boolean;
+}) {
+  return (
+    <div className="flex flex-col">
+      {ids.map((id, index) => {
+        const isWide = index % 3 !== 1;
+        const src = getShowcaseImageUrl(id, isWide ? 1200 : 900);
+
+        return (
+          <div
+            key={id}
+            className={
+              index > 0 ? "border-t border-store-border/60" : undefined
+            }
+          >
+            <ProtectedBanner
+              src={src}
+              alt={GENERIC_ALT}
+              priority={startPriority && index === 0}
+              aspect={isWide ? "wide" : "tall"}
+              sizes="100vw"
+            />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/** 上方 preview 帶 — 無標籤橫向 scroll */
+export function LandingBannerRail() {
+  const ids = SHOWCASE_DESIGN_IDS.slice(1, 5);
 
   return (
-    <figure
-      className={`group overflow-hidden rounded-2xl bg-white ring-1 ring-store-border shadow-sm ${
-        compact ? "w-[72vw] max-w-[280px] shrink-0 sm:w-[240px]" : ""
-      }`}
-    >
-      <div className="relative aspect-[16/9] bg-[#f5f5f5]">
-        <Image
-          src={src}
-          alt={`帽款設計 ${id}`}
-          fill
-          sizes={
-            compact
-              ? "(max-width: 640px) 72vw, 240px"
-              : "(max-width: 640px) 50vw, 25vw"
-          }
-          className="object-contain transition duration-500 group-hover:scale-[1.02]"
-        />
+    <div className="relative w-full overflow-hidden">
+      <div className="flex snap-x snap-mandatory gap-0 overflow-x-auto scrollbar-none">
+        {ids.map((id) => (
+          <div
+            key={id}
+            className="w-[85vw] shrink-0 snap-center border-r border-store-border/40 sm:w-[45vw] lg:w-[32vw]"
+          >
+            <ProtectedBanner
+              src={getShowcaseImageUrl(id, 960)}
+              alt={GENERIC_ALT}
+              aspect="wide"
+              sizes="(max-width: 640px) 85vw, 32vw"
+            />
+          </div>
+        ))}
       </div>
-      <figcaption className="flex items-center justify-between px-3 py-2">
-        <span className="text-xs font-medium text-store-foreground">
-          設計 {id}
-        </span>
-        <span className="text-[10px] uppercase tracking-wider text-store-muted">
-          Design {id}
-        </span>
-      </figcaption>
-    </figure>
+    </div>
   );
 }
