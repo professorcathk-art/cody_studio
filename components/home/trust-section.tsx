@@ -1,10 +1,10 @@
 import { FullBleedImage } from "@/components/home/full-bleed-image";
 import { LuxuryBody, LuxuryEyebrow, LuxuryTitle } from "@/components/luxury/typography";
-import { getShowcaseCoverUrl } from "@/lib/landing-showcase";
+import { getShowcaseCoverUrl, HERO_DESIGN_ID } from "@/lib/landing-showcase";
 
 export function TrustSection() {
-  const imageA = getShowcaseCoverUrl("077", 1600, 1200);
-  const imageB = getShowcaseCoverUrl("078", 1600, 1200);
+  const imageA = getShowcaseCoverUrl(HERO_DESIGN_ID, 1600, 1200);
+  const imageB = getShowcaseCoverUrl("084", 1600, 1200);
 
   return (
     <section className="bg-neutral-950 text-white">
@@ -12,7 +12,8 @@ export function TrustSection() {
       <FullBleedImage
         src={imageA}
         overlay="dark"
-        heightClass="h-[70vh] min-h-[480px]"
+        focusRightOnMobile
+        heightClass="h-[55vh] min-h-[360px] sm:h-[70vh] sm:min-h-[480px]"
       />
 
       <div className="mx-auto max-w-4xl px-4 py-24 text-center sm:px-8 sm:py-32">
@@ -40,11 +41,12 @@ export function TrustSection() {
         <FullBleedImage
           src={imageB}
           overlay="dark"
-          heightClass="h-[55vh] min-h-[400px]"
+          focusRightOnMobile
+          heightClass="h-[45vh] min-h-[320px] sm:h-[55vh] sm:min-h-[400px]"
         />
       </div>
 
-      <div className="grid grid-cols-3 divide-x divide-white/10 border-t border-white/10 text-center">
+      <div className="grid grid-cols-1 divide-y divide-white/10 border-t border-white/10 text-center sm:grid-cols-3 sm:divide-x sm:divide-y-0">
         {[
           { en: "30+", zh: "出口國家" },
           { en: "MOQ 1,000", zh: "批量起訂" },

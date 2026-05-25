@@ -22,7 +22,7 @@ export function LuxuryTitle({
     <Tag className={className}>
       <span
         className={cn(
-          "font-display block text-3xl font-medium leading-[1.15] tracking-wide sm:text-4xl lg:text-5xl",
+          "font-display block text-2xl font-medium leading-[1.15] tracking-wide sm:text-4xl lg:text-5xl",
           invert ? "text-white" : "text-neutral-950"
         )}
       >

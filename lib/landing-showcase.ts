@@ -1,8 +1,15 @@
 import { getFeedUrl, getPublicObjectUrl, getTransformedUrl } from "@/lib/images";
 
-/** Boss A storage prefix — showcase designs 072–079 */
+/** Boss A storage prefix */
 const BOSS_A_ID = "03b575af-1a6b-4e06-b2bb-96bc0cffb2a3";
 
+/** 首屏 hero 背景 */
+export const HERO_DESIGN_ID = "083";
+
+/** 首頁編輯式 banner（083 用於 hero，084 等用於下方展示） */
+export const LANDING_GALLERY_IDS = ["083", "084"] as const;
+
+/** 舊 showcase 列表（保留供其他用途） */
 export const SHOWCASE_DESIGN_IDS = [
   "072",
   "073",
@@ -12,6 +19,8 @@ export const SHOWCASE_DESIGN_IDS = [
   "077",
   "078",
   "079",
+  "083",
+  "084",
 ] as const;
 
 export function getShowcaseImageUrl(designId: string, width = 640): string {
