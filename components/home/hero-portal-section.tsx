@@ -28,7 +28,7 @@ export function HeroPortalSection() {
           <LuxuryTitle
             as="h1"
             en="Cody Cap Studio"
-            zh="Cody Cap Studio"
+            zh="Premium OEM/ODM Cap Solutions"
             invert
             className="mx-auto"
           />
@@ -44,10 +44,10 @@ export function HeroPortalSection() {
           <div className="rounded-sm border border-white/25 bg-black/45 p-6 shadow-2xl backdrop-blur-md sm:p-8 lg:p-10">
             <p className="mb-5 text-center sm:mb-6">
               <span className="font-display block text-base tracking-wide text-white sm:text-lg">
-                Premium OEM/ODM Cap Solutions
+                Existing Clients Enter Here
               </span>
               <span className="mt-1 block text-xs tracking-[0.12em] text-white/70 sm:text-sm">
-                頂級帽款設計與製造解決方案
+                現有企業客戶由此進入
               </span>
             </p>
             <LoginForm variant="luxury" />
