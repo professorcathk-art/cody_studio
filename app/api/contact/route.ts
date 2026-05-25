@@ -63,8 +63,8 @@ export async function POST(request: Request) {
   }
 
   const resend = new Resend(apiKey);
-  const from =
-    process.env.RESEND_FROM ?? "Cody Cap Studio <onboarding@resend.dev>";
+  // Resend free tier — default sender only
+  const from = "onboarding@resend.dev";
 
   const replyTo = contact.includes("@") ? contact : undefined;
 

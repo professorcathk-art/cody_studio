@@ -7,7 +7,7 @@ import { TrustSection } from "@/components/home/trust-section";
 
 export function LuxuryHomepage() {
   return (
-    <div className="safe-bottom bg-white">
+    <div className="safe-bottom">
       <HeroPortalSection />
       <ProcessSection />
       <EditorialGallerySection />
